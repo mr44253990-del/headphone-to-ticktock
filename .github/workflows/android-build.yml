@@ -45,8 +45,16 @@ jobs:
 
       - name: Prepare Config Files
         run: |
+          # Create .env for the secrets-gradle-plugin. Do NOT write an empty
+          # "GEMINI_API_KEY=" entry: the plugin injects values verbatim into
+          # BuildConfig, and an empty value breaks javac with
+          # "error: illegal start of expression" (= ;).
           touch .env
-          echo "GEMINI_API_KEY=" >> .env
+          # If a real key is configured in the repo secrets, package it
+          # (quoted, as the plugin inserts the value verbatim).
+          if [ -n "${{ secrets.GEMINI_API_KEY }}" ]; then
+            echo "GEMINI_API_KEY=\"${{ secrets.GEMINI_API_KEY }}\"" >> .env
+          fi
           if [ ! -f "app/google-services.json" ]; then
             # Placeholder google-services.json for CI builds only. It must contain an
             # api_key/current_key object or the google-services plugin fails with
