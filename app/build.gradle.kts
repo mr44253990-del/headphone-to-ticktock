@@ -54,11 +54,7 @@ android {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
   }
-  
-  kotlin {
-    jvmToolchain(11)
-  }
-  
+
   buildFeatures {
     compose = true
     buildConfig = true
@@ -67,6 +63,16 @@ android {
   dependenciesInfo {
     includeInApk = false
     includeInBundle = true
+  }
+}
+
+// AGP 9 built-in Kotlin: configure Kotlin at the top level of the build file.
+// Do NOT put a kotlin { } block inside android { } — that resolves to the
+// legacy kotlin.sourceSets DSL, which built-in Kotlin forbids.
+// See https://developer.android.com/r/tools/built-in-kotlin
+kotlin {
+  compilerOptions {
+    jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
   }
 }
 
