@@ -48,7 +48,40 @@ jobs:
           touch .env
           echo "GEMINI_API_KEY=" >> .env
           if [ ! -f "app/google-services.json" ]; then
-            echo '{"project_info":{"project_number":"123456789","project_id":"smartscroll-app"},"client":[{"client_info":{"mobilesdk_app_id":"1:123456789:android:abcdef","android_client_info":{"package_name":"com.aistudio.smartscrolldj.btzyqk"}}}]}' > app/google-services.json
+            # Placeholder google-services.json for CI builds only. It must contain an
+            # api_key/current_key object or the google-services plugin fails with
+            # "Missing api_key/current_key object".
+            cat > app/google-services.json <<'EOF'
+          {
+            "project_info": {
+              "project_number": "12345678900",
+              "project_id": "smartscroll-app",
+              "storage_bucket": "smartscroll-app.appspot.com"
+            },
+            "client": [
+              {
+                "client_info": {
+                  "mobilesdk_app_id": "1:12345678900:android:0000000000000000000000",
+                  "android_client_info": {
+                    "package_name": "com.aistudio.smartscrolldj.btzyqk"
+                  }
+                },
+                "oauth_client": [],
+                "api_key": [
+                  {
+                    "current_key": "AIzaSyDummyCiPlaceholderKey000000000000000"
+                  }
+                ],
+                "services": {
+                  "appinvite_service": {
+                    "other_platform_oauth_client": []
+                  }
+                }
+              }
+            ],
+            "configuration_version": "1"
+          }
+          EOF
           fi
 
       - name: Prepare Gradle Wrapper
