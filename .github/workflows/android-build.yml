@@ -14,7 +14,7 @@ permissions:
   contents: write
 
 jobs:
-  build-apk:
+  build:
     name: Build Android APK
     runs-on: ubuntu-latest
 
@@ -28,16 +28,38 @@ jobs:
           distribution: "temurin"
           java-version: "17"
 
-      - name: Setup Gradle
+      - name: Setup Gradle 9.3.1
         uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "9.3.1"
+          cache-read-only: false
 
-      - name: Create local dummy env file
+      - name: Restore Debug Keystore
+        run: |
+          if [ -f "debug.keystore.base64" ]; then
+            base64 -d debug.keystore.base64 > debug.keystore
+          else
+            keytool -genkey -v -keystore debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
+          fi
+          chmod 644 debug.keystore
+
+      - name: Prepare Config Files
         run: |
           touch .env
           echo "GEMINI_API_KEY=" >> .env
+          if [ ! -f "app/google-services.json" ]; then
+            echo '{"project_info":{"project_number":"123456789","project_id":"smartscroll-app"},"client":[{"client_info":{"mobilesdk_app_id":"1:123456789:android:abcdef","android_client_info":{"package_name":"com.aistudio.smartscrolldj.btzyqk"}}}]}' > app/google-services.json
+          fi
+
+      - name: Prepare Gradle Wrapper
+        run: |
+          if [ ! -f "./gradlew" ]; then
+            gradle wrapper --gradle-version 9.3.1
+          fi
+          chmod +x gradlew
 
       - name: Build Debug APK
-        run: gradle assembleDebug --stacktrace
+        run: ./gradlew assembleDebug --no-daemon --stacktrace
 
       - name: Upload Debug APK Artifact
         uses: actions/upload-artifact@v4
