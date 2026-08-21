@@ -1,0 +1,6 @@
+{
+  "name": "SmartScroll & DJ Bass",
+  "description": "হেডফোন বাটন দিয়ে টিকটক/ফেসবুক ভিডিও স্ক্রোল ও লাইক করুন এবং ডিজে বাস ও ইকুয়ালাইজার দিয়ে সাউন্ড বুস্ট করুন।",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

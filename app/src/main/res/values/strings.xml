@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">SmartScroll &amp; DJ Bass</string>
+    <string name="accessibility_service_description">এই সার্ভিসটি আপনার হেডফোনের বাটনের চাপ সনাক্ত করে টিকটক, ফেসবুক এবং ইউটিউব রিলস-এ স্বয়ংক্রিয় স্ক্রোলিং ও ডাবল-ক্লিক (লাইক) জেসচার পাঠাতে কাজ করে।</string>
+</resources>
